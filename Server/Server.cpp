@@ -1,12 +1,4 @@
-// Server
-#pragma comment(lib, "Ws2_32.lib")
-#include <iostream>
-#include <cstring>
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <windows.h>
-
-using namespace std;
+#include "Server.h"
 
 int main() {
 
@@ -51,20 +43,36 @@ int main() {
 
 	listen(Listen, SOMAXCONN);
 
+	
+
 	while (true) {
 
 		if (Connect = accept(Listen, NULL, NULL)) {
+
+			FileManager manager;
+
 			cout << "Client complite connected." << endl;
-			recv(Connect, message, sizeof(message), 0);
-			send(Connect, "Message from server: You complite connect to server", MAX_PATH, 0);
-			break;
+
+			//cut data from socket
+			recv(Connect, message, sizeof(message), NULL);
+			//get requested file name
+			manager.GetRequestedFile(message);
+			//find requested file in public folder
+			if (manager.MakeResponseBody(manager.GetFileDir()) == GOOD) {
+
+				//make response
+				manager.MakeResponse(GOOD, manager.GetResponseBody());
+				//get response
+				string response = manager.GetResponse();
+				//send response to client
+				send(Connect, response.c_str(),
+					response.length(), 0);
+			}
 		}
 
 		Sleep(100);
 
 	}
-
-	cout << message << endl;
 
 	ZeroMemory(message, sizeof(message));
 
@@ -75,3 +83,4 @@ int main() {
 	system("pause");
 	return 0;
 }
+
