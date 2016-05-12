@@ -9,5 +9,6 @@ public:
 	Support() {};
 	~Support() {};
 	void getStatus(int);
+	void SystemError(string);
 };
 

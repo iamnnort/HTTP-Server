@@ -1,5 +1,6 @@
 #pragma once
 #include "ServerLibrary.h"
+#include "Logger.h"
 
 class Manager: public ServerLibrary
 {
@@ -7,11 +8,10 @@ class Manager: public ServerLibrary
 	string server_response;
 
 public:
-	Manager();
-	~Manager();
-	string GetFileDir();
+	Manager() {};
+	~Manager() {};
 	string GetResponse();
-	void GetRequestedFile(string message);
 	void MakeResponse(int, string);
+	bool MakeLog(string, string);
 };
 

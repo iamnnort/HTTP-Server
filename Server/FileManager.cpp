@@ -10,7 +10,7 @@ int FileManager::MakeResponseBody(string filename) {
 	Support support;
 
 	filename = ROOT_DIR + filename;
-	ifstream ifs(filename, ifstream::in);
+	ifstream ifs(filename.c_str(), ifstream::in);
 	if (!ifs) {
 		support.getStatus(404);
 		return 404;
