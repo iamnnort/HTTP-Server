@@ -1,4 +1,5 @@
 #include "Server.h"
+#include "SQLiteDatabase.h"
 
 int main() {
 
@@ -79,7 +80,7 @@ int main() {
 			Client client;
 
 			cout << "Client complite connected..." << endl;
-			
+			cout << message << endl;
 			//cut data from socket
 #ifdef _MSC_VER
 			ZeroMemory(message, sizeof(message));
