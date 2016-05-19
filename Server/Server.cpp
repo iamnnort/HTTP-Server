@@ -1,11 +1,24 @@
 #include "Server.h"
-#include "SQLiteDatabase.h"
 
 int main() {
 
 	Support support;
 
+	SQLiteDatabase *db = new SQLiteDatabase();
+	db->Select("users");
+
 #ifdef _MSC_VER
+
+	STARTUPINFO si;
+	ZeroMemory(&si, sizeof(STARTUPINFO));
+	si.cb = sizeof(si);
+	PROCESS_INFORMATION pi;
+	ZeroMemory(&pi, sizeof(pi));
+
+	if (!CreateProcess(NULL, "Manager", NULL ,NULL, TRUE,
+		CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
+		support.SystemError("CreateProcess failed");
+	}
 
 	WSAData wsa;
 	WORD Version = MAKEWORD(2, 1);
@@ -128,6 +141,8 @@ int main() {
 	closesocket(Connect);
 	closesocket(Listen);
 	WSACleanup();
+	CloseHandle(pi.hProcess);
+	CloseHandle(pi.hThread);
 
 #else
 

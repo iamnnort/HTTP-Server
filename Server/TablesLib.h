@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <list>
+#include <vector>
 #include "lib/sqlite3.h"
 
 using namespace std;
@@ -20,9 +21,15 @@ struct Domains {
 
 struct Users {
 	int id;
-	string name;
-	string surname;
-	double salary;
+	string login;
+	string password;
+};
+
+struct PrivatePage {
+	int id;
+	int access_level;
+	string domain;
+	string page;
 };
 
 class TablesLib {

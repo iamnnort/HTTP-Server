@@ -1,4 +1,4 @@
-#include "SQLiteDatabase.h"
+#include "../Server/SQLiteDatabase.h"
 
 /**
  * Open sqlite3 database file or create if one not exist.
@@ -44,10 +44,25 @@ void SQLiteDatabase::Init() {
 	this->CreateTable("domains", colDomains);
 
 	const char* colUsers =	"id INTEGER PRIMARY KEY AUTOINCREMENT," \
-							"name TEXT NOT NULL," \
-							"surname TEXT NOT NULL," \
-							"salary REAL NOT NULL";
+							"login TEXT NOT NULL," \
+							"password TEXT NOT NULL";
 	this->CreateTable("users", colUsers);
+
+	const char* colPrivate ="id INTEGER PRIMARY KEY AUTOINCREMENT," \
+							"domain_id INTEGER NOT NULL," \
+							"page TEXT NOT NULL," \
+							"access_level INTEGER NOT NULL,"\
+							"FOREIGN KEY(domain_id) REFERENCES domains(id)";
+	this->CreateTable("private_page", colPrivate);
+
+	const char* colAccess = "id INTEGER PRIMARY KEY AUTOINCREMENT," \
+							"user_id INTEGER NOT NULL," \
+							"page_id INTEGER NOT NULL," \
+							"FOREIGN KEY(user_id) REFERENCES users(id)," \
+							"FOREIGN KEY(page_id) REFERENCES private_page(id)";
+	this->CreateTable("access", colAccess);
+
+	//this->Insert("users", "login, password", "'admin', 'admin'");
 }
 
 /**
@@ -106,7 +121,7 @@ bool SQLiteDatabase::Insert(const char* table, const char* columns, const char* 
  *
  * @param table type of table.
  */
-void SQLiteDatabase::Select(const char* table) {
+sqlite3_stmt* SQLiteDatabase::Select(const char* table) {
 
 	string sql =	(string)"SELECT * "
 					+ " FROM "
@@ -119,18 +134,19 @@ void SQLiteDatabase::Select(const char* table) {
 
 	switch (short_command) {
 		case 'd': {
-			this->SelectDomains(stmt);
-			list<Domains>::iterator it;
+			return stmt;
 			break;
 		}
 		case 'u': {
-			this->SelectUsers(stmt);
+			return stmt;
 			break;
 		}
 		default: {
 			this->Error("SQL", "Table not found");
 		}
 	}
+
+	return nullptr;
 }
 
 void SQLiteDatabase::SelectDomains(sqlite3_stmt *stmt) {
@@ -153,40 +169,6 @@ void SQLiteDatabase::SelectDomains(sqlite3_stmt *stmt) {
 			buffer >> domain.domain;
 
 			this->domains.push_back(domain);
-		}
-
-		sqlite3_finalize(stmt);
-	}
-}
-
-void SQLiteDatabase::SelectUsers(sqlite3_stmt *stmt) {
-
-	int stat = sqlite3_step(stmt);
-	stringstream buffer;
-
-	if (stat == SQLITE_ROW) {
-
-		for (; sqlite3_column_text(stmt, 0); sqlite3_step(stmt)) {
-
-			Users user;
-
-			buffer.clear();
-			buffer << sqlite3_column_text(stmt, 0);
-			buffer >> user.id;
-
-			buffer.clear();
-			buffer << sqlite3_column_text(stmt, 1);
-			buffer >> user.name;
-
-			buffer.clear();
-			buffer << sqlite3_column_text(stmt, 2);
-			buffer >> user.surname;
-
-			buffer.clear();
-			buffer << sqlite3_column_text(stmt, 3);
-			buffer >> user.salary;
-
-			this->users.push_back(user);
 		}
 
 		sqlite3_finalize(stmt);

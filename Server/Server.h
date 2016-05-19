@@ -21,3 +21,4 @@
 
 #include "FileManager.h"
 #include "Client.h"
+#include "SQLiteDatabase.h"
