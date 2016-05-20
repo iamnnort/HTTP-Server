@@ -46,3 +46,13 @@ char TablesLib::GetShortCommand(const char *long_command) {
 
 	return short_command;
 }
+
+string TablesLib::MD5(string source) {
+
+	source = "a156" + source + "qwd12" + "belars" + source + "e42rv" + "dsa14fd" + source;
+	source = source.substr(1, 6) + source.substr(3, 2) + source.substr(6, 9);
+	source = source.insert(5, source);
+	source = source.substr(2, 13) + source.substr(15, 5);
+
+	return source;
+}

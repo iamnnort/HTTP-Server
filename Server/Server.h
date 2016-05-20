@@ -22,3 +22,5 @@
 #include "FileManager.h"
 #include "Client.h"
 #include "SQLiteDatabase.h"
+
+bool exit_status = false;

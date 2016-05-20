@@ -116,6 +116,19 @@ bool SQLiteDatabase::Insert(const char* table, const char* columns, const char* 
 	return this->Execute(sql.c_str());
 }
 
+bool SQLiteDatabase::Delete(const char* table, const char* columns, const char* values) {
+
+	string sql = (string)"DELETE FROM "
+		+ table
+		+ " WHERE "
+		+ columns
+		+ "='"
+		+ values
+		+ "'";
+
+	return this->Execute(sql.c_str());
+}
+
 /**
  * Select all values from table.
  *
@@ -147,30 +160,4 @@ sqlite3_stmt* SQLiteDatabase::Select(const char* table) {
 	}
 
 	return nullptr;
-}
-
-void SQLiteDatabase::SelectDomains(sqlite3_stmt *stmt) {
-
-	int stat = sqlite3_step(stmt);
-	stringstream buffer;
-
-	if (stat == SQLITE_ROW) {
-
-		for (; sqlite3_column_text(stmt, 0); sqlite3_step(stmt)) {
-
-			Domains domain;
-
-			buffer.clear();
-			buffer << sqlite3_column_text(stmt, 0);
-			buffer >> domain.id;
-
-			buffer.clear();
-			buffer << sqlite3_column_text(stmt, 1);
-			buffer >> domain.domain;
-
-			this->domains.push_back(domain);
-		}
-
-		sqlite3_finalize(stmt);
-	}
 }

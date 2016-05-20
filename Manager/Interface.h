@@ -1,5 +1,6 @@
 #pragma once
-#include "../Server/Clients.h"
+#include "../Server/dbClients.h"
+#include "../Server/dbDomains.h"
 
 #define LINE_SIZE 30
 #define BORDER 2
@@ -17,6 +18,11 @@ public:
 	void GetDomainsMenu();
 	void GetPrivatePagesMenu();
 	int GetSelectedItem();
-	void PrintUsers(list<Users>);
+	void PrintUsers();
+	bool AddUser();
+	bool RemoveUser();
+	void PrintDomains();
+	bool AddDomain();
+	bool RemoveDomain();
 };
 

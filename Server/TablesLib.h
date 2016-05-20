@@ -1,11 +1,15 @@
 #pragma once
-
+#ifdef _MSC_VER
+#include <windows.h>
+#endif
 #include <iostream>
 #include <string>
 #include <sstream>
 #include <list>
 #include <vector>
 #include "lib/sqlite3.h"
+
+#define EXIT_EVENT "$EXIT$"
 
 using namespace std;
 
@@ -44,6 +48,7 @@ public:
 	~TablesLib();
 	list<Domains> GetDomains();
 	list<Users> GetUsers();
-	char TablesLib::GetShortCommand(const char*);
+	char GetShortCommand(const char*);
+	string MD5(string);
 };
 

@@ -1,5 +1,16 @@
 #include "Server.h"
 
+#ifdef _MSC_VER
+DWORD WINAPI CheckExit(LPVOID lpParam) {
+
+	HANDLE hExit = CreateEvent(NULL, TRUE, FALSE, EXIT_EVENT);
+	WaitForSingleObject(hExit, INFINITE);
+	exit_status = true;
+
+	return 0;
+}
+#endif
+
 int main() {
 
 	Support support;
@@ -9,13 +20,21 @@ int main() {
 
 #ifdef _MSC_VER
 
+	DWORD dwCheckExit, dwCheckExitParam = 1;
+	HANDLE hcheckExit;
+	hcheckExit = CreateThread(NULL, 0, CheckExit,
+		&dwCheckExitParam, 0, &dwCheckExit);
+	if (!hcheckExit) {
+		support.SystemError("CreateThread hcheckExit failed");
+	}
+
 	STARTUPINFO si;
 	ZeroMemory(&si, sizeof(STARTUPINFO));
 	si.cb = sizeof(si);
 	PROCESS_INFORMATION pi;
 	ZeroMemory(&pi, sizeof(pi));
 
-	if (!CreateProcess(NULL, "Manager", NULL ,NULL, TRUE,
+	if (!CreateProcess(NULL, "ComManager", NULL ,NULL, TRUE,
 		CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
 		support.SystemError("CreateProcess failed");
 	}
@@ -133,6 +152,10 @@ int main() {
 			Sleep(100);	
 #endif
 		}
+	
+		if (exit_status) {
+			break;
+		}
 	}
 
 #ifdef _MSC_VER
@@ -143,6 +166,7 @@ int main() {
 	WSACleanup();
 	CloseHandle(pi.hProcess);
 	CloseHandle(pi.hThread);
+	CloseHandle(hcheckExit);
 
 #else
 

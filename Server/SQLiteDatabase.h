@@ -24,7 +24,7 @@ public:
 	void CreateTable(const char*, const char*);
 	bool Execute(const char*);
 	bool Insert(const char*, const char*, const char*);
+	bool Delete(const char*, const char*, const char*);
 	sqlite3_stmt* Select(const char*);
-	void SelectDomains(sqlite3_stmt*);
 };
 

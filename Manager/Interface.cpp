@@ -109,6 +109,10 @@ void Interface::GetMainMenu() {
 			break;
 		}
 		case 4: {
+#ifdef _MSC_VER
+			HANDLE hExit = OpenEvent(EVENT_ALL_ACCESS | EVENT_MODIFY_STATE, TRUE, EXIT_EVENT);
+			SetEvent(hExit);
+#endif
 			break;
 		}
 		default: {
@@ -146,15 +150,17 @@ void Interface::GetUsersMenu() {
 
 	switch (GetSelectedItem()) {
 		case 1: {
+			this->AddUser();
+			this->GetUsersMenu();
 			break;
 		}
 		case 2: {
+			this->RemoveUser();
+			this->GetUsersMenu();
 			break;
 		}
 		case 3: {
-			Clients cli;
-			cli.SelectUsers();
-			PrintUsers(cli.GetUsers());
+			PrintUsers();
 			system("pause");
 			this->GetUsersMenu();
 			break;
@@ -178,7 +184,7 @@ void Interface::GetDomainsMenu() {
 
 	item.clear();
 	item.push_back("1");
-	item.push_back("Add user");
+	item.push_back("Add domain");
 	cout << this->GetMenuItem(item) << endl;
 
 	item.clear();
@@ -188,7 +194,7 @@ void Interface::GetDomainsMenu() {
 
 	item.clear();
 	item.push_back("3");
-	item.push_back("Show domain");
+	item.push_back("Show domains");
 	cout << this->GetMenuItem(item) << endl;
 
 	item.clear();
@@ -198,12 +204,19 @@ void Interface::GetDomainsMenu() {
 
 	switch (GetSelectedItem()) {
 		case 1: {
+			this->AddDomain();
+			this->GetDomainsMenu();
 			break;
 		}
 		case 2: {
+			this->RemoveDomain();
+			this->GetDomainsMenu();
 			break;
 		}
 		case 3: {
+			this->PrintDomains();
+			system("pause");
+			this->GetDomainsMenu();
 			break;
 		}
 		case 4: {
@@ -245,6 +258,7 @@ void Interface::GetPrivatePagesMenu() {
 
 	switch (GetSelectedItem()) {
 		case 1: {
+
 			break;
 		}
 		case 2: {
@@ -273,9 +287,13 @@ int Interface::GetSelectedItem() {
 	return n;
 }
 
-void Interface::PrintUsers(list<Users> users) {
+void Interface::PrintUsers() {
 
 	system("cls");
+
+	dbClients cli;
+	cli.SelectUsers();
+	list<Users> users = cli.GetUsers();
 
 	vector<string> columns;
 	columns.push_back("id");
@@ -301,6 +319,85 @@ void Interface::PrintUsers(list<Users> users) {
 		cout << this->GetMenuItem(columns) << endl;
 	}
 
+}
+
+bool Interface::AddUser() {
+
+	cout << "# ADD USER" << endl;
+	cout << "# Login: ";
+	string login;
+	cin >> login;
+	cout << "# Password: ";
+	string password;
+	cin >> password;
+
+	dbClients cli;
+	return cli.AddUser(login, password);
+}
+
+bool Interface::RemoveUser() {
+
+	cout << "# REMOVE USER" << endl;
+	cout << "# Login: ";
+	string login;
+	cin >> login;
+
+	dbClients cli;
+	return cli.RemoveUser(login);
+}
+
+void Interface::PrintDomains() {
+
+	system("cls");
+
+	dbDomains dom;
+	dom.SelectDomains();
+	list<Domains> domains = dom.GetDomains();
+
+	vector<string> columns;
+	columns.push_back("id");
+	columns.push_back("domain");
+
+	cout << this->GetMenuItem(2, "Domains") << endl;
+	cout << this->GetMenuItem(columns) << endl;
+
+	list<Domains>::iterator it;
+
+	for (it = domains.begin(); it != domains.end(); it++) {
+
+		columns.clear();
+		stringstream ss;
+		ss << it->id;
+		string id;
+		ss >> id;
+		columns.push_back(id);
+		columns.push_back(it->domain);
+
+		cout << this->GetMenuItem(columns) << endl;
+	}
+
+}
+
+bool Interface::AddDomain() {
+
+	cout << "# ADD DOMAIN" << endl;
+	cout << "# Domain: ";
+	string domain;
+	cin >> domain;
+
+	dbDomains dom;
+	return dom.AddDomain(domain);
+}
+
+bool Interface::RemoveDomain() {
+
+	cout << "# REMOVE DOMAIN" << endl;
+	cout << "# Domain: ";
+	string domain;
+	cin >> domain;
+
+	dbDomains dom;
+	return dom.RemoveDomain(domain);
 }
 
 
