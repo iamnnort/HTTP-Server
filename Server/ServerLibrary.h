@@ -11,7 +11,7 @@
 
 #define SERVER_NAME "NPWEB"
 #define SERVER_PORT 1337
-#define BUF_SIZE 512
+#define BUF_SIZE 1024
 
 #define NL "\r\n"
 #define SPACE " "
@@ -22,6 +22,10 @@
 
 #define ROOT_DIR "../public"
 #define INDEX_HTML "index.html"
+#define AUTH_FILE "../private/auth.html"
+#define LOGIN "login"
+#define PASSWORD "password"
+#define QUSTION_MARK "?"
 #define GET "GET"
 #define HTTP "HTTP/"
 #define HTTP_VER "1.1"

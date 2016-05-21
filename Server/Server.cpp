@@ -34,10 +34,10 @@ int main() {
 	PROCESS_INFORMATION pi;
 	ZeroMemory(&pi, sizeof(pi));
 
-	if (!CreateProcess(NULL, "ComManager", NULL ,NULL, TRUE,
+	/*if (!CreateProcess(NULL, "ComManager", NULL ,NULL, TRUE,
 		CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi)) {
 		support.SystemError("CreateProcess failed");
-	}
+	}*/
 
 	WSAData wsa;
 	WORD Version = MAKEWORD(2, 1);
@@ -101,6 +101,9 @@ int main() {
 	cout << SERVER_NAME << " is running..." << endl;
 	cout << "Waiting clients..." << endl;
 
+	FileManager manager;
+	Client client;
+
 	while (true) {
 
 #ifdef _MSC_VER
@@ -108,25 +111,31 @@ int main() {
 #else
 		if (Connect = accept(Listen, 0, 0) >= 0){
 #endif		
-			FileManager manager;
-			Client client;
 
-			cout << "Client complite connected..." << endl;
-			cout << message << endl;
 			//cut data from socket
 #ifdef _MSC_VER
-			ZeroMemory(message, sizeof(message));
-			recv(Connect, message, sizeof(message), 0);
+			ZeroMemory(message, sizeof(message));		
 #else
 			memset(&message, 0, sizeof(message));
-			cout << recv(Connect, message, sizeof(message), 0);		
 #endif	
+			while (true) {
+				int status;
+#ifdef _MSC_VER
+				status = recv(Connect, message, sizeof(message), 0);
+#else
+				status = recv(Connect, message, sizeof(message), 0);
+#endif	
+				if (status) {
+					break;
+				}
+			}
+
+			cout << message << endl;
 			//get client info
 			client.MakeClientInfo(message);
 			client.PrintClientInfo();
 			//find requested file in public folder
-			if (manager.MakeResponseBody(client.GetFileDir()) == GOOD) {
-
+			if (manager.MakeResponseBody(client) == GOOD) {
 				//set good access status
 				client.SetAccessStatus(GOOD);
 				//make response

@@ -61,8 +61,6 @@ void SQLiteDatabase::Init() {
 							"FOREIGN KEY(user_id) REFERENCES users(id)," \
 							"FOREIGN KEY(page_id) REFERENCES private_page(id)";
 	this->CreateTable("access", colAccess);
-
-	//this->Insert("users", "login, password", "'admin', 'admin'");
 }
 
 /**
@@ -134,11 +132,15 @@ bool SQLiteDatabase::Delete(const char* table, const char* columns, const char* 
  *
  * @param table type of table.
  */
-sqlite3_stmt* SQLiteDatabase::Select(const char* table) {
+sqlite3_stmt* SQLiteDatabase::Select(const char* table, const string _where) {
 
-	string sql =	(string)"SELECT * "
-					+ " FROM "
-					+ table;
+	string sql = (string)"SELECT * "
+		+ " FROM "
+		+ table;
+
+	if (!_where.empty()) {
+		sql += " WHERE " + _where;
+	}
 
 	sqlite3_stmt *stmt;
 	sqlite3_prepare_v2(this->db, sql.c_str(), -1, &stmt, nullptr);
@@ -151,6 +153,10 @@ sqlite3_stmt* SQLiteDatabase::Select(const char* table) {
 			break;
 		}
 		case 'u': {
+			return stmt;
+			break;
+		}
+		case 'p': {
 			return stmt;
 			break;
 		}

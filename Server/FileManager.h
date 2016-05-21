@@ -1,6 +1,9 @@
 #pragma once
 #include "Manager.h"
 #include "Support.h"
+#include "dbPages.h"
+#include "dbDomains.h"
+#include "Client.h"
 
 
 class FileManager : public Manager
@@ -9,7 +12,7 @@ class FileManager : public Manager
 public:
 	FileManager() {};
 	~FileManager() {};
-	int MakeResponseBody(string);
+	int MakeResponseBody(Client);
 	string GetResponseBody();
 };
 

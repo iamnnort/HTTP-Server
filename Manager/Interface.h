@@ -1,6 +1,7 @@
 #pragma once
-#include "../Server/dbClients.h"
+#include "../Server/dbUsers.h"
 #include "../Server/dbDomains.h"
+#include "../Server/dbPages.h"
 
 #define LINE_SIZE 30
 #define BORDER 2
@@ -24,5 +25,8 @@ public:
 	void PrintDomains();
 	bool AddDomain();
 	bool RemoveDomain();
+	void PrintPages();
+	bool AddPage();
+	bool RemovePage();
 };
 

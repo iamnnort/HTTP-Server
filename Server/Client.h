@@ -9,12 +9,17 @@ class Client : public ServerLibrary
 	string file_addr;
 	string access_type;
 	int access_status;
+	string login;
+	string password;
 public:
 	Client() {};
 	~Client() {};
 	string GetListenName();
 	string GetFileDir();
 	string GetSiteName();
+	string GetFileAddr();
+	string GetUserLogin();
+	string GetUserPassword();
 	void SetAccessStatus(int);
 	void MakeClientName(string);
 	void MakeRequestedPath(string);

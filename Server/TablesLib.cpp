@@ -10,6 +10,10 @@ TablesLib::TablesLib() {
 	table.full_title = "users";
 	table.short_title = 'u';
 	table_names.push_back(table);
+
+	table.full_title = "private_page";
+	table.short_title = 'p';
+	table_names.push_back(table);
 }
 
 TablesLib::~TablesLib() {
@@ -22,9 +26,15 @@ list<Domains> TablesLib::GetDomains(){
 	
 	return this->domains;
 }
+
 list<Users> TablesLib::GetUsers() {
 
 	return this->users;
+}
+
+list<PrivatePage> TablesLib::GetPages() {
+
+	return this->pages;
 }
 
 /*

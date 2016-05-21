@@ -18,21 +18,21 @@ struct TableNames {
 	char short_title;
 };
 
-struct Domains {
-	int id;
-	string domain;
-};
-
 struct Users {
 	int id;
 	string login;
 	string password;
 };
 
+struct Domains {
+	int id;
+	string domain;
+};
+
 struct PrivatePage {
 	int id;
 	int access_level;
-	string domain;
+	int domain_id;
 	string page;
 };
 
@@ -42,12 +42,14 @@ protected:
 	list<TableNames> table_names;
 	list<Domains> domains;
 	list<Users> users;
+	list<PrivatePage> pages;
 	
 public:
 	TablesLib();
 	~TablesLib();
 	list<Domains> GetDomains();
 	list<Users> GetUsers();
+	list<PrivatePage> GetPages();
 	char GetShortCommand(const char*);
 	string MD5(string);
 };

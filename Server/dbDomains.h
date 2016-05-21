@@ -6,7 +6,7 @@ class dbDomains : public SQLiteDatabase
 public:
 	dbDomains();
 	~dbDomains();
-	void SelectDomains();
+	void SelectDomains(const string = "");
 	bool AddDomain(string);
 	bool RemoveDomain(const string);
 };

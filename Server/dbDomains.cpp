@@ -6,12 +6,13 @@ dbDomains::dbDomains(){
 dbDomains::~dbDomains(){
 }
 
-void dbDomains::SelectDomains() {
+void dbDomains::SelectDomains(const string _where) {
 
-	sqlite3_stmt *stmt = this->Select("domains");
+	sqlite3_stmt *stmt = this->Select("domains", _where);
 
 	int stat = sqlite3_step(stmt);
 	stringstream buffer;
+	this->domains.clear();
 
 	if (stat == SQLITE_ROW) {
 

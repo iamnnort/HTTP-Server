@@ -74,8 +74,6 @@ artifacts/
 *.scc
 *.vcxproj*
 *.sln
-*.html
-*.css
 *git*
 *sqlite3*
 

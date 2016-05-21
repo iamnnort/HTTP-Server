@@ -20,6 +20,9 @@ string Interface::GetMenuItem(const int size, const char* value, const char sep=
 	if (!((strlen(value) % 2 != 0) && (size % 2 != 0))) {
 		space_offset = 1;
 	}
+	if ((size == 4)) {
+		space_offset = -1;
+	}
 
 	int space_size;
 	space_size = (LINE_SIZE * size - BORDER * 2 - size - 1 + space_offset  - strlen(value)) / 2;
@@ -238,7 +241,7 @@ void Interface::GetPrivatePagesMenu() {
 
 	item.clear();
 	item.push_back("1");
-	item.push_back("Add user");
+	item.push_back("Add private page");
 	cout << this->GetMenuItem(item) << endl;
 
 	item.clear();
@@ -258,13 +261,21 @@ void Interface::GetPrivatePagesMenu() {
 
 	switch (GetSelectedItem()) {
 		case 1: {
-
+			this->AddPage();
+			system("pause");
+			this->GetPrivatePagesMenu();
 			break;
 		}
 		case 2: {
+			this->RemovePage();
+			system("pause");
+			this->GetPrivatePagesMenu();
 			break;
 		}
 		case 3: {
+			this->PrintPages();
+			system("pause");
+			this->GetPrivatePagesMenu();
 			break;
 		}
 		case 4: {
@@ -281,7 +292,7 @@ int Interface::GetSelectedItem() {
 
 	int n;
 
-	cout << "Number: ";
+	cout << "# NUMBER: ";
 	cin >> n;
 
 	return n;
@@ -291,7 +302,7 @@ void Interface::PrintUsers() {
 
 	system("cls");
 
-	dbClients cli;
+	dbUsers cli;
 	cli.SelectUsers();
 	list<Users> users = cli.GetUsers();
 
@@ -324,25 +335,25 @@ void Interface::PrintUsers() {
 bool Interface::AddUser() {
 
 	cout << "# ADD USER" << endl;
-	cout << "# Login: ";
+	cout << "## LOGIN: ";
 	string login;
 	cin >> login;
-	cout << "# Password: ";
+	cout << "## PASSWORD: ";
 	string password;
 	cin >> password;
 
-	dbClients cli;
+	dbUsers cli;
 	return cli.AddUser(login, password);
 }
 
 bool Interface::RemoveUser() {
 
 	cout << "# REMOVE USER" << endl;
-	cout << "# Login: ";
+	cout << "## LOGIN: ";
 	string login;
 	cin >> login;
 
-	dbClients cli;
+	dbUsers cli;
 	return cli.RemoveUser(login);
 }
 
@@ -381,7 +392,7 @@ void Interface::PrintDomains() {
 bool Interface::AddDomain() {
 
 	cout << "# ADD DOMAIN" << endl;
-	cout << "# Domain: ";
+	cout << "## DOMAIN: ";
 	string domain;
 	cin >> domain;
 
@@ -392,7 +403,7 @@ bool Interface::AddDomain() {
 bool Interface::RemoveDomain() {
 
 	cout << "# REMOVE DOMAIN" << endl;
-	cout << "# Domain: ";
+	cout << "## DOMAIN: ";
 	string domain;
 	cin >> domain;
 
@@ -400,4 +411,137 @@ bool Interface::RemoveDomain() {
 	return dom.RemoveDomain(domain);
 }
 
+bool Interface::AddPage() {
 
+	cout << "# ADD PRIVATE PAGE" << endl;
+
+	cout << "## DOMAIN: ";
+	string domain;
+	cin >> domain;
+
+	cout << "## PRIVATE PAGE: ";
+	string page;
+	cin >> page;
+
+	cout << "## ACCESS LEVEL [1-3]: ";
+	int access_level;
+	cin >> access_level;
+
+	if ((access_level < 1) || access_level > 3) {
+		cout << "Access level should be in range [1-3]." << endl;
+		return false;
+	}
+
+	stringstream ss;
+	ss << "domain = ";
+	ss << "'";
+	ss << domain;
+	ss << "' LIMIT 1";
+	string sql = ss.str();
+
+	dbDomains dom;
+	dom.SelectDomains(sql);
+	list<Domains> domains = dom.GetDomains();
+	list<Domains>::iterator it;
+
+	dbPages pg;
+	if (domains.size() == 1) {
+		it = domains.begin();
+		if (it->id) {
+			if (pg.AddPage(page, access_level, it->id)) {
+				cout << "Private page was added." << endl;
+				return true;
+			}
+		}
+	}
+	else {
+		cout << "Unknown domain name." << endl;
+	}
+
+	return false;
+}
+
+bool Interface::RemovePage() {
+
+	cout << "# REMOVE PRIVATE PAGE" << endl;
+
+	cout << "## DOMAIN: ";
+	string domain;
+	cin >> domain;
+
+	cout << "## PRIVATE PAGE: ";
+	string page;
+	cin >> page;
+
+	stringstream ss;
+	ss << "domain = ";
+	ss << "'";
+	ss << domain;
+	ss << "' LIMIT 1";
+	string sql = ss.str();
+
+	dbDomains dom;
+	dom.SelectDomains(sql);
+	list<Domains> domains = dom.GetDomains();
+	list<Domains>::iterator it;
+
+	dbPages pg;
+	if (domains.size() == 1) {
+		it = domains.begin();
+		if (it->id) {
+			if (pg.RemovePage(page, it->id)) {
+				cout << "Private page was removed." << endl;
+				return true;
+			}
+		}
+	}
+	else {
+		cout << "Unknown domain name." << endl;
+	}
+
+	return false;
+}
+
+void Interface::PrintPages() {
+
+	system("cls");
+
+	dbPages pg;
+	pg.SelectPages();
+	list<PrivatePage> pages = pg.GetPages();
+
+	vector<string> columns;
+	columns.push_back("id");
+	columns.push_back("page");
+	columns.push_back("access_level");
+	columns.push_back("domain_id");
+
+	cout << this->GetMenuItem(4, "Private pages") << endl;
+	cout << this->GetMenuItem(columns) << endl;
+
+	list<PrivatePage>::iterator it;
+
+	for (it = pages.begin(); it != pages.end(); it++) {
+
+		columns.clear();
+		stringstream ss;
+		ss << it->id;
+		string tmp;
+		ss >> tmp;
+		columns.push_back(tmp);
+		columns.push_back(it->page);
+		ss.clear();
+		tmp.clear();
+		ss << it->access_level;
+		ss >> tmp;
+		columns.push_back(tmp);
+		ss.clear();
+		tmp.clear();
+		ss << it->domain_id;
+		ss >> tmp;
+		columns.push_back(tmp);
+
+		cout << this->GetMenuItem(columns) << endl;
+	}
+
+}

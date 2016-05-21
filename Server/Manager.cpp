@@ -8,10 +8,8 @@ string Manager::GetResponse() {
 void Manager::MakeResponse(int status, string response_body) {
 
 	stringstream response;
-	status = 401;
 	response << "HTTP/" << HTTP_VER << SPACE << status << SPACE 
 		<< HTTP_STATUS_CODE[status] << NL
-		<< "WWW-Authenticate: Basic realm=\"WallyWorld\"" << NL
 		<< "Server: " << SERVER_NAME << NL
 		<< "Version: HTTP/" << HTTP_VER << NL
 		<< "Content-Type: " << CONTENT_TYPE 

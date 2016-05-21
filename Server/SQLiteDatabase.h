@@ -25,6 +25,6 @@ public:
 	bool Execute(const char*);
 	bool Insert(const char*, const char*, const char*);
 	bool Delete(const char*, const char*, const char*);
-	sqlite3_stmt* Select(const char*);
+	sqlite3_stmt* Select(const char*, const string = "");
 };
 

@@ -11,9 +11,23 @@ string Client::GetFileDir() {
 	return file_dir;
 }
 
+string Client::GetFileAddr() {
+
+	return this->file_addr;
+}
+
 string Client::GetSiteName() {
 
 	return this->site_name;
+}
+
+string Client::GetUserLogin() {
+
+	return this->login;
+}
+string Client::GetUserPassword() {
+
+	return this->password;
 }
 
 void Client::SetAccessStatus(int status) {
@@ -32,8 +46,25 @@ void Client::MakeClientName(string message) {
 
 void Client::MakeRequestedPath(string message) {
 
+
 	size_t left_border = message.find(GET) + strlen(GET) + 1;
-	size_t right_border = message.find(SPACE, left_border);
+	size_t right_border;
+	if (message.find(LOGIN) == -1) {
+		right_border = message.find(SPACE, left_border);
+	}
+	else {
+		right_border = message.find(QUSTION_MARK, left_border);
+		size_t login_lb = message.find(LOGIN, left_border) + strlen(LOGIN) + 1;
+		size_t login_rb = message.find(PASSWORD, login_lb) - 1;
+		this->login = message.substr(
+			login_lb,
+			login_rb - login_lb);
+		size_t password_lb = login_rb + strlen(PASSWORD) + 2;
+		size_t password_rb = message.find(SPACE, password_lb);
+		this->password = message.substr(
+			password_lb,
+			password_rb - password_lb);
+	}
 	string file_path = message.substr(
 		left_border,
 		right_border - left_border);
