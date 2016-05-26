@@ -15,9 +15,6 @@ int main() {
 
 	Support support;
 
-	SQLiteDatabase *db = new SQLiteDatabase();
-	db->Select("users");
-
 #ifdef _MSC_VER
 
 	DWORD dwCheckExit, dwCheckExitParam = 1;
@@ -68,9 +65,10 @@ int main() {
 
 #else
 
-	struct sockaddr_in server, client;
-	int Listen = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP), Connect;
+	struct sockaddr_in server;
+	int Listen, Connect;
 
+	Listen = socket(PF_INET, SOCK_STREAM, IPPROTO_TCP);
 	if (Listen == -1) {
 		support.SystemError("Socket is not been initialized");
 		exit(EXIT_FAILURE);
@@ -78,7 +76,7 @@ int main() {
 
 	memset(&server, 0, sizeof(server));
 
-	server.sin_family = AF_INET;
+	server.sin_family = PF_INET;
 	server.sin_port = htons(SERVER_PORT);
 	server.sin_addr.s_addr = htonl(INADDR_ANY);
 
@@ -88,7 +86,7 @@ int main() {
 		exit(EXIT_FAILURE);
 	}
 
-	if (listen(Listen, 1) == -1) {
+	if (listen(Listen, 10) == -1) {
 		support.SystemError("Socket is not been listened");
 		close(Listen);
 		exit(EXIT_FAILURE);
@@ -102,35 +100,26 @@ int main() {
 	cout << "Waiting clients..." << endl;
 
 	FileManager manager;
-	
+	Client client;
 
 	while (true) {
 
 #ifdef _MSC_VER
 		if (Connect = accept(Listen, NULL, NULL)) {
 #else
-		if (Connect = accept(Listen, 0, 0) >= 0){
+		Connect = accept(Listen, 0, 0);
+		if (Connect >= 0){
 #endif		
-			Client client;
+
 			//cut data from socket
 #ifdef _MSC_VER
 			ZeroMemory(message, sizeof(message));		
 #else
 			memset(&message, 0, sizeof(message));
 #endif	
-			while (true) {
-				int status;
-#ifdef _MSC_VER
-				status = recv(Connect, message, sizeof(message), 0);
-#else
-				status = recv(Connect, message, sizeof(message), 0);
-#endif	
-				if (status) {
-					break;
-				}
-			}
+			recv(Connect, message, sizeof(message), 0);
 
-			//cout << message << endl;
+			cout << "MRS: " << message << endl;
 			//get client info
 			client.MakeClientInfo(message);
 			//find requested file in public folder
@@ -156,7 +145,9 @@ int main() {
 			string content = client.MakeLogContent();
 			manager.MakeLog("access", content);
 #ifdef _MSC_VER
-			Sleep(100);	
+#elif __linux__
+			shutdown(Connect, SHUT_RDWR);
+			close(Connect);
 #endif
 		}
 	

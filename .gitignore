@@ -76,6 +76,7 @@ artifacts/
 *.sln
 *git*
 *sqlite3*
+*gch*
 
 # Chutzpah Test files
 _Chutzpah*

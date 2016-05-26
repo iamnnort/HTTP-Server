@@ -43,7 +43,6 @@ int FileManager::MakeResponseBody(Client *client) {
 			if (pages.size()) {
 				for (it = pages.begin(); it != pages.end(); it++) {
 					int index = filename.find(it->page);
-					cout << it->page << endl;
 					if(index >= 0 && index <= filename.length()) {
 						dbUsers users;
 						bool user_right = users.CheckUserRights(

@@ -7,6 +7,9 @@
 #include <sstream>
 #include <list>
 #include <vector>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "lib/sqlite3.h"
 
 #define EXIT_EVENT "$EXIT$"
