@@ -3,6 +3,7 @@
 #include "Support.h"
 #include "dbPages.h"
 #include "dbDomains.h"
+#include "dbUsers.h";
 #include "Client.h"
 
 
@@ -12,7 +13,7 @@ class FileManager : public Manager
 public:
 	FileManager() {};
 	~FileManager() {};
-	int MakeResponseBody(Client);
+	int MakeResponseBody(Client*);
 	string GetResponseBody();
 };
 

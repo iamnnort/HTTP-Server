@@ -5,12 +5,12 @@ string FileManager::GetResponseBody() {
 	return this->server_response_body;
 }
 
-int FileManager::MakeResponseBody(Client client) {
+int FileManager::MakeResponseBody(Client *client) {
 
 	this->server_response_body.clear();
-	string domain = client.GetSiteName();
-	string filename = client.GetFileAddr();
-	string filedir = client.GetFileDir();
+	string domain = client->GetSiteName();
+	string filename = client->GetFileAddr();
+	string filedir = client->GetFileDir();
 
 	stringstream ss;
 	ss << "domain = ";
@@ -42,42 +42,40 @@ int FileManager::MakeResponseBody(Client client) {
 
 			if (pages.size()) {
 				for (it = pages.begin(); it != pages.end(); it++) {
-					switch (it->access_level) {
-						case 1: {
-							break;
-						}
-						case 2: {
-							break;
-						}
-						case 3: {
-							if (it->page.find(filename) != -1) {
-								check_user = true;
-							}
-							break;
+					int index = filename.find(it->page);
+					cout << it->page << endl;
+					if(index >= 0 && index <= filename.length()) {
+						dbUsers users;
+						bool user_right = users.CheckUserRights(
+							client->GetUserLogin(),
+							client->GetUserPassword(),
+							it->rang_id,
+							it->id);
+						if (!user_right) {
+							private_page = true;
 						}
 					}
+					
 				}
 			}
 		}
 	}
 
-	if (check_user) {
-		
-	}
-
 	Support support;
 
 	if (private_page) {
+		client->SetAccessStatus(401);
 		filedir = AUTH_FILE;
 	}
 	else {
 		filedir = ROOT_DIR + filedir;
+		client->SetAccessStatus(200);
 	}
 
 	ifstream ifs(filedir.c_str(), ifstream::in);
 	if (!ifs) {
-		support.getStatus(404);
-		return 404;
+		client->SetAccessStatus(404);
+		return client->GetAccessStatus();
 	}
 
 	string sub_str;
@@ -88,8 +86,7 @@ int FileManager::MakeResponseBody(Client client) {
 
 	ifs.close();
 
-	support.getStatus(200);
-	return 200;
+	return client->GetAccessStatus();
 }
 
 

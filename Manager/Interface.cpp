@@ -95,6 +95,11 @@ void Interface::GetMainMenu() {
 
 	item.clear();
 	item.push_back("4");
+	item.push_back("Rangs");
+	cout << this->GetMenuItem(item) << endl;
+
+	item.clear();
+	item.push_back("5");
 	item.push_back("Shut down");
 	cout << this->GetMenuItem(item) << endl;
 
@@ -112,6 +117,10 @@ void Interface::GetMainMenu() {
 			break;
 		}
 		case 4: {
+			this->GetRangsMenu();
+			break;
+		}
+		case 5: {
 #ifdef _MSC_VER
 			HANDLE hExit = OpenEvent(EVENT_ALL_ACCESS | EVENT_MODIFY_STATE, TRUE, EXIT_EVENT);
 			SetEvent(hExit);
@@ -148,6 +157,11 @@ void Interface::GetUsersMenu() {
 
 	item.clear();
 	item.push_back("4");
+	item.push_back("Add unique rights");
+	cout << this->GetMenuItem(item) << endl;
+
+	item.clear();
+	item.push_back("5");
 	item.push_back("Back");
 	cout << this->GetMenuItem(item) << endl;
 
@@ -169,6 +183,14 @@ void Interface::GetUsersMenu() {
 			break;
 		}
 		case 4: {
+			if (this->AddUniqueRights()) {
+				cout << "User got unique rights." << endl;
+			}
+			system("pause");
+			this->GetUsersMenu();
+			break;
+		}
+		case 5: {
 			this->GetMainMenu();
 			break;
 		}
@@ -288,6 +310,40 @@ void Interface::GetPrivatePagesMenu() {
 	}
 }
 
+void Interface::GetRangsMenu() {
+
+	system("cls");
+	vector<string> item;
+
+	cout << this->GetMenuItem(2, "Rangs") << endl;
+
+	item.clear();
+	item.push_back("1");
+	item.push_back("Show rangs");
+	cout << this->GetMenuItem(item) << endl;
+
+	item.clear();
+	item.push_back("2");
+	item.push_back("Back");
+	cout << this->GetMenuItem(item) << endl;
+
+	switch (GetSelectedItem()) {
+		case 1: {
+			this->PrintRangs();
+			system("pause");
+			this->GetRangsMenu();
+			break;
+		}
+		case 2: {
+			this->GetMainMenu();
+			break;
+		}
+		default: {
+			this->GetRangsMenu();
+		}
+	}
+}
+
 int Interface::GetSelectedItem() {
 
 	int n;
@@ -310,8 +366,9 @@ void Interface::PrintUsers() {
 	columns.push_back("id");
 	columns.push_back("login");
 	columns.push_back("password");
+	columns.push_back("rang_id");
 
-	cout << this->GetMenuItem(3, "Users") << endl;
+	cout << this->GetMenuItem(4, "Users") << endl;
 	cout << this->GetMenuItem(columns) << endl;
 
 	list<Users>::iterator it;
@@ -326,6 +383,11 @@ void Interface::PrintUsers() {
 		columns.push_back(id);
 		columns.push_back(it->login);
 		columns.push_back(it->password);
+		ss.clear();
+		ss << it->rang_id;
+		string rang_id;
+		ss >> rang_id;
+		columns.push_back(rang_id);
 
 		cout << this->GetMenuItem(columns) << endl;
 	}
@@ -341,9 +403,29 @@ bool Interface::AddUser() {
 	cout << "## PASSWORD: ";
 	string password;
 	cin >> password;
+	cout << "## RANG [1-4]: ";
+	int rang_id;
+	cin >> rang_id;
 
 	dbUsers cli;
-	return cli.AddUser(login, password);
+	return cli.AddUser(login, password, rang_id);
+}
+
+bool Interface::AddUniqueRights() {
+
+	cout << "# ADD USER" << endl;
+	cout << "## LOGIN: ";
+	string login;
+	cin >> login;
+	cout << "## DOMAIN: ";
+	string domain;
+	cin >> domain;
+	cout << "## PRIVATE PAGE: ";
+	string page;
+	cin >> page;
+
+	dbUsers cli;
+	return cli.AddUserRights(login, domain, page);
 }
 
 bool Interface::RemoveUser() {
@@ -423,12 +505,12 @@ bool Interface::AddPage() {
 	string page;
 	cin >> page;
 
-	cout << "## ACCESS LEVEL [1-3]: ";
-	int access_level;
-	cin >> access_level;
+	cout << "## RANG [1-4]: ";
+	int rang_id;
+	cin >> rang_id;
 
-	if ((access_level < 1) || access_level > 3) {
-		cout << "Access level should be in range [1-3]." << endl;
+	if ((rang_id < 1) || rang_id > 4) {
+		cout << "Access level should be in range [1-4]." << endl;
 		return false;
 	}
 
@@ -448,7 +530,7 @@ bool Interface::AddPage() {
 	if (domains.size() == 1) {
 		it = domains.begin();
 		if (it->id) {
-			if (pg.AddPage(page, access_level, it->id)) {
+			if (pg.AddPage(page, rang_id, it->id)) {
 				cout << "Private page was added." << endl;
 				return true;
 			}
@@ -513,7 +595,7 @@ void Interface::PrintPages() {
 	vector<string> columns;
 	columns.push_back("id");
 	columns.push_back("page");
-	columns.push_back("access_level");
+	columns.push_back("rang_id");
 	columns.push_back("domain_id");
 
 	cout << this->GetMenuItem(4, "Private pages") << endl;
@@ -532,7 +614,7 @@ void Interface::PrintPages() {
 		columns.push_back(it->page);
 		ss.clear();
 		tmp.clear();
-		ss << it->access_level;
+		ss << it->rang_id;
 		ss >> tmp;
 		columns.push_back(tmp);
 		ss.clear();
@@ -544,4 +626,35 @@ void Interface::PrintPages() {
 		cout << this->GetMenuItem(columns) << endl;
 	}
 
+}
+
+void Interface::PrintRangs() {
+
+	system("cls");
+
+	dbRangs rg;
+	rg.SelectRangs();
+	list<Rangs> rangs = rg.GetRangs();
+
+	vector<string> columns;
+	columns.push_back("id");
+	columns.push_back("rang");
+
+	cout << this->GetMenuItem(2, "Rangs") << endl;
+	cout << this->GetMenuItem(columns) << endl;
+
+	list<Rangs>::iterator it;
+
+	for (it = rangs.begin(); it != rangs.end(); it++) {
+
+		columns.clear();
+		stringstream ss;
+		ss << it->id;
+		string tmp;
+		ss >> tmp;
+		columns.push_back(tmp);
+		columns.push_back(it->rang);
+
+		cout << this->GetMenuItem(columns) << endl;
+	}
 }

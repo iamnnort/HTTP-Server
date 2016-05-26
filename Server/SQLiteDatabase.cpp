@@ -39,19 +39,26 @@ void SQLiteDatabase::Error(const char* type, const char* err_msg) {
  */
 void SQLiteDatabase::Init() {
 
-	const char* colDomains ="id INTEGER PRIMARY KEY AUTOINCREMENT," \
+	/*const char* colDomains ="id INTEGER PRIMARY KEY AUTOINCREMENT," \
 							"domain TEXT NOT NULL";
 	this->CreateTable("domains", colDomains);
 
+	const char* colRangs =	"id INTEGER PRIMARY KEY AUTOINCREMENT," \
+							"rang TEXT NOT NULL";
+	this->CreateTable("rangs", colRangs);
+
 	const char* colUsers =	"id INTEGER PRIMARY KEY AUTOINCREMENT," \
 							"login TEXT NOT NULL," \
-							"password TEXT NOT NULL";
+							"password TEXT NOT NULL," \
+							"rang_id INTEGER NOT NULL," \
+							"FOREIGN KEY(rang_id) REFERENCES rangs(id)";
 	this->CreateTable("users", colUsers);
 
 	const char* colPrivate ="id INTEGER PRIMARY KEY AUTOINCREMENT," \
 							"domain_id INTEGER NOT NULL," \
 							"page TEXT NOT NULL," \
-							"access_level INTEGER NOT NULL,"\
+							"rang_id INTEGER NOT NULL,"\
+							"FOREIGN KEY(rang_id) REFERENCES rangs(id)," \
 							"FOREIGN KEY(domain_id) REFERENCES domains(id)";
 	this->CreateTable("private_page", colPrivate);
 
@@ -60,7 +67,15 @@ void SQLiteDatabase::Init() {
 							"page_id INTEGER NOT NULL," \
 							"FOREIGN KEY(user_id) REFERENCES users(id)," \
 							"FOREIGN KEY(page_id) REFERENCES private_page(id)";
-	this->CreateTable("access", colAccess);
+	this->CreateTable("access", colAccess);*/
+
+	
+	/*this->Insert("rangs", "rang", "'user'");
+	this->Insert("rangs", "rang", "'administrator'");
+	this->Insert("rangs", "rang", "'moderator'");
+	this->Insert("rangs", "rang", "'manager'");
+	this->Insert("rangs", "rang", "'tester'");*/
+	
 }
 
 /**
@@ -157,6 +172,10 @@ sqlite3_stmt* SQLiteDatabase::Select(const char* table, const string _where) {
 			break;
 		}
 		case 'p': {
+			return stmt;
+			break;
+		}
+		case 'r': {
 			return stmt;
 			break;
 		}

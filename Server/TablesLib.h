@@ -22,6 +22,7 @@ struct Users {
 	int id;
 	string login;
 	string password;
+	int rang_id;
 };
 
 struct Domains {
@@ -31,9 +32,14 @@ struct Domains {
 
 struct PrivatePage {
 	int id;
-	int access_level;
+	int rang_id;
 	int domain_id;
 	string page;
+};
+
+struct Rangs {
+	int id;
+	string rang;
 };
 
 class TablesLib {
@@ -43,6 +49,7 @@ protected:
 	list<Domains> domains;
 	list<Users> users;
 	list<PrivatePage> pages;
+	list<Rangs> rangs;
 	
 public:
 	TablesLib();
@@ -50,6 +57,7 @@ public:
 	list<Domains> GetDomains();
 	list<Users> GetUsers();
 	list<PrivatePage> GetPages();
+	list<Rangs> GetRangs();
 	char GetShortCommand(const char*);
 	string MD5(string);
 };

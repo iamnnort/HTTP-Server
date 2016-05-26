@@ -25,6 +25,7 @@
 #define AUTH_FILE "../private/auth.html"
 #define LOGIN "login"
 #define PASSWORD "password"
+#define REFERER "Referer"
 #define QUSTION_MARK "?"
 #define GET "GET"
 #define HTTP "HTTP/"

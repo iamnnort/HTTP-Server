@@ -2,6 +2,7 @@
 #include "../Server/dbUsers.h"
 #include "../Server/dbDomains.h"
 #include "../Server/dbPages.h"
+#include "../Server/dbRangs.h"
 
 #define LINE_SIZE 30
 #define BORDER 2
@@ -18,9 +19,11 @@ public:
 	void GetUsersMenu();
 	void GetDomainsMenu();
 	void GetPrivatePagesMenu();
+	void GetRangsMenu();
 	int GetSelectedItem();
 	void PrintUsers();
 	bool AddUser();
+	bool AddUniqueRights();
 	bool RemoveUser();
 	void PrintDomains();
 	bool AddDomain();
@@ -28,5 +31,6 @@ public:
 	void PrintPages();
 	bool AddPage();
 	bool RemovePage();
+	void PrintRangs();
 };
 

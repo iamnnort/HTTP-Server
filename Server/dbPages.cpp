@@ -34,7 +34,7 @@ void dbPages::SelectPages(const string _where) {
 
 			buffer.clear();
 			buffer << sqlite3_column_text(stmt, 3);
-			buffer >> page.access_level;
+			buffer >> page.rang_id;
 
 			this->pages.push_back(page);
 		}
@@ -43,9 +43,9 @@ void dbPages::SelectPages(const string _where) {
 	}
 }
 
-bool dbPages::AddPage(const string page, const int assecc_level, const int domain_id) {
+bool dbPages::AddPage(const string page, const int rang_id, const int domain_id) {
 
-	if ((!page.length()) || !assecc_level || !domain_id) {
+	if ((!page.length()) || !rang_id || !domain_id) {
 		return false;
 	}
 
@@ -53,12 +53,12 @@ bool dbPages::AddPage(const string page, const int assecc_level, const int domai
 	ss << "'";
 	ss << page;
 	ss << "', ";
-	ss << assecc_level;
+	ss << rang_id;
 	ss << ", ";
 	ss << domain_id;
 	string values = ss.str();
 
-	return this->Insert("private_page", "page, access_level, domain_id", values.c_str());
+	return this->Insert("private_page", "page, rang_id, domain_id", values.c_str());
 }
 
 bool dbPages::RemovePage(const string page, const int domain_id) {

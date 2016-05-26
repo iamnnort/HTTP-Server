@@ -14,6 +14,10 @@ TablesLib::TablesLib() {
 	table.full_title = "private_page";
 	table.short_title = 'p';
 	table_names.push_back(table);
+
+	table.full_title = "rangs";
+	table.short_title = 'r';
+	table_names.push_back(table);
 }
 
 TablesLib::~TablesLib() {
@@ -35,6 +39,11 @@ list<Users> TablesLib::GetUsers() {
 list<PrivatePage> TablesLib::GetPages() {
 
 	return this->pages;
+}
+
+list<Rangs> TablesLib::GetRangs() {
+
+	return this->rangs;
 }
 
 /*
@@ -66,3 +75,4 @@ string TablesLib::MD5(string source) {
 
 	return source;
 }
+

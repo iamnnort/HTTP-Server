@@ -30,6 +30,11 @@ string Client::GetUserPassword() {
 	return this->password;
 }
 
+int Client::GetAccessStatus() {
+
+	return this->access_status;
+}
+
 void Client::SetAccessStatus(int status) {
 
 	this->access_status = status;
@@ -49,7 +54,7 @@ void Client::MakeRequestedPath(string message) {
 
 	size_t left_border = message.find(GET) + strlen(GET) + 1;
 	size_t right_border;
-	if (message.find(LOGIN) == -1) {
+	if (message.find(LOGIN) == -1 || message.find(LOGIN) > message.find(REFERER)) {
 		right_border = message.find(SPACE, left_border);
 	}
 	else {
@@ -116,6 +121,8 @@ void Client::MakeClientInfo(string message) {
 
 void Client::PrintClientInfo() {
 
+	Support support;
+
 	cout << "# Client:" << endl
 		<< "## Client name: "
 		<< this->listen_name << endl
@@ -123,6 +130,13 @@ void Client::PrintClientInfo() {
 		<< this->site_name << endl
 		<< "## Requested page: "
 		<< this->file_addr << endl;
+	support.getStatus(this->access_status);
+	if (this->login.length() && this->password.length()) {
+		cout << "## Login: ";
+		cout << this->login << endl;
+		cout << "## Password: ";
+		cout << this->password << endl;
+	}
 }
 
 string Client::MakeLogContent() {

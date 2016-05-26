@@ -102,7 +102,7 @@ int main() {
 	cout << "Waiting clients..." << endl;
 
 	FileManager manager;
-	Client client;
+	
 
 	while (true) {
 
@@ -111,7 +111,7 @@ int main() {
 #else
 		if (Connect = accept(Listen, 0, 0) >= 0){
 #endif		
-
+			Client client;
 			//cut data from socket
 #ifdef _MSC_VER
 			ZeroMemory(message, sizeof(message));		
@@ -130,14 +130,11 @@ int main() {
 				}
 			}
 
-			cout << message << endl;
+			//cout << message << endl;
 			//get client info
 			client.MakeClientInfo(message);
-			client.PrintClientInfo();
 			//find requested file in public folder
-			if (manager.MakeResponseBody(client) == GOOD) {
-				//set good access status
-				client.SetAccessStatus(GOOD);
+			if (manager.MakeResponseBody(&client) != NOT_FOUND) {
 				//make response
 				manager.MakeResponse(GOOD, manager.GetResponseBody());
 				//get response
@@ -154,6 +151,7 @@ int main() {
 			else {
 				client.SetAccessStatus(NOT_FOUND);
 			}
+			client.PrintClientInfo();
 			//complite log file
 			string content = client.MakeLogContent();
 			manager.MakeLog("access", content);

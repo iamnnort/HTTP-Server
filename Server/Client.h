@@ -1,5 +1,6 @@
 #pragma once
 #include "ServerLibrary.h"
+#include "Support.h"
 #include <ctime>
 
 class Client : public ServerLibrary
@@ -20,6 +21,7 @@ public:
 	string GetFileAddr();
 	string GetUserLogin();
 	string GetUserPassword();
+	int GetAccessStatus();
 	void SetAccessStatus(int);
 	void MakeClientName(string);
 	void MakeRequestedPath(string);
