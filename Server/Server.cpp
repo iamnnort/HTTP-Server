@@ -133,7 +133,7 @@ int main() {
 				send(Connect, response.c_str(),
 					response.length(), 0);
 #else
-				send(i32ConnectFD, response.c_str(),
+				send(Connect, response.c_str(),
 					response.length(), 0);
 #endif
 			}
@@ -144,8 +144,8 @@ int main() {
 			//complite log file
 			string content = client.MakeLogContent();
 			manager.MakeLog("access", content);
-#ifdef _MSC_VER
-#elif __linux__
+
+#ifdef __linux__
 			shutdown(Connect, SHUT_RDWR);
 			close(Connect);
 #endif
