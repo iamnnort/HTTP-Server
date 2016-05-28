@@ -119,7 +119,7 @@ int main() {
 #endif	
 			recv(Connect, message, sizeof(message), 0);
 
-			cout << "MRS: " << message << endl;
+			//cout << "MRS: " << message << endl;
 			//get client info
 			client.MakeClientInfo(message);
 			//find requested file in public folder
