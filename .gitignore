@@ -65,7 +65,6 @@ artifacts/
 *.tlh
 *.tmp
 *.tmp_proj
-*.log
 *.vspscc
 *.vssscc
 .builds
@@ -75,8 +74,8 @@ artifacts/
 *.vcxproj*
 *.sln
 *git*
-*sqlite3*
-*gch*
+*.gch*
+*.cd*
 
 # Chutzpah Test files
 _Chutzpah*

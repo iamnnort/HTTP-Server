@@ -23,6 +23,8 @@
 #define ROOT_DIR "../public"
 #define INDEX_HTML "index.html"
 #define AUTH_FILE "../private/auth.html"
+#define NOT_FOUND_FILE "../private/404.html"
+#define COM_MANAGER_PATH "./ComManager"
 #define LOGIN "login"
 #define PASSWORD "password"
 #define REFERER "Referer"

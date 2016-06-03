@@ -84,6 +84,9 @@ void Client::MakeRequestedSite(string file_path) {
 	file_path = file_path.substr(1, file_path.length() - 1);
 	// search second right slash position
 	size_t right_border = file_path.find(RSLS);
+	if (right_border == -1) {
+		right_border = file_path.find(SPACE);
+	}
 	// cutting site name
 	this->site_name = file_path.substr(0, right_border);
 }
@@ -94,11 +97,17 @@ void Client::MakeRequestedFile(string file_path) {
 	file_path = file_path.substr(1, file_path.length() - 1);
 	// search start of the file path name
 	size_t left_border = file_path.find(RSLS);
-	// cutting file address
-	this->file_addr = file_path.substr(left_border);
-	// request consist of alone site name
-	if (this->file_addr == RSLS) {
+	if (left_border == -1) {
+		this->file_addr += "/";
 		this->file_addr += INDEX_HTML;
+	}
+	else {
+		// cutting file address
+		this->file_addr = file_path.substr(left_border);
+		// request consist of alone site name
+		if (this->file_addr == RSLS) {
+			this->file_addr += INDEX_HTML;
+		}
 	}
 }
 

@@ -73,7 +73,11 @@ string Interface::GetMenuItem(const vector<string> value, const char sep = '|') 
 
 void Interface::GetMainMenu() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 	vector<string> item;
 
 	cout << this->GetMenuItem(2, "Main menu") << endl;
@@ -135,7 +139,11 @@ void Interface::GetMainMenu() {
 
 void Interface::GetUsersMenu() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 	vector<string> item;
 
 	cout << this->GetMenuItem(2, "Users menu") << endl;
@@ -178,7 +186,8 @@ void Interface::GetUsersMenu() {
 		}
 		case 3: {
 			PrintUsers();
-			system("pause");
+			getchar();
+			getchar();
 			this->GetUsersMenu();
 			break;
 		}
@@ -186,7 +195,7 @@ void Interface::GetUsersMenu() {
 			if (this->AddUniqueRights()) {
 				cout << "User got unique rights." << endl;
 			}
-			system("pause");
+			getchar();
 			this->GetUsersMenu();
 			break;
 		}
@@ -202,7 +211,11 @@ void Interface::GetUsersMenu() {
 
 void Interface::GetDomainsMenu() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 	vector<string> item;
 
 	cout << this->GetMenuItem(2, "Domains menu") << endl;
@@ -240,7 +253,8 @@ void Interface::GetDomainsMenu() {
 		}
 		case 3: {
 			this->PrintDomains();
-			system("pause");
+			getchar();
+			getchar();
 			this->GetDomainsMenu();
 			break;
 		}
@@ -256,7 +270,11 @@ void Interface::GetDomainsMenu() {
 
 void Interface::GetPrivatePagesMenu() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 	vector<string> item;
 
 	cout << this->GetMenuItem(2, "Private pages menu") << endl;
@@ -284,19 +302,20 @@ void Interface::GetPrivatePagesMenu() {
 	switch (GetSelectedItem()) {
 		case 1: {
 			this->AddPage();
-			system("pause");
+			getchar();
 			this->GetPrivatePagesMenu();
 			break;
 		}
 		case 2: {
 			this->RemovePage();
-			system("pause");
+			getchar();
 			this->GetPrivatePagesMenu();
 			break;
 		}
 		case 3: {
 			this->PrintPages();
-			system("pause");
+			getchar();
+			getchar();
 			this->GetPrivatePagesMenu();
 			break;
 		}
@@ -312,7 +331,11 @@ void Interface::GetPrivatePagesMenu() {
 
 void Interface::GetRangsMenu() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 	vector<string> item;
 
 	cout << this->GetMenuItem(2, "Rangs") << endl;
@@ -330,7 +353,8 @@ void Interface::GetRangsMenu() {
 	switch (GetSelectedItem()) {
 		case 1: {
 			this->PrintRangs();
-			system("pause");
+			getchar();
+			getchar();
 			this->GetRangsMenu();
 			break;
 		}
@@ -356,7 +380,11 @@ int Interface::GetSelectedItem() {
 
 void Interface::PrintUsers() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 
 	dbUsers cli;
 	cli.SelectUsers();
@@ -441,7 +469,11 @@ bool Interface::RemoveUser() {
 
 void Interface::PrintDomains() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 
 	dbDomains dom;
 	dom.SelectDomains();
@@ -586,7 +618,11 @@ bool Interface::RemovePage() {
 
 void Interface::PrintPages() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 
 	dbPages pg;
 	pg.SelectPages();
@@ -630,7 +666,11 @@ void Interface::PrintPages() {
 
 void Interface::PrintRangs() {
 
+#ifdef _MSC_VER
 	system("cls");
+#elif __linux__
+	system("clear");
+#endif
 
 	dbRangs rg;
 	rg.SelectRangs();

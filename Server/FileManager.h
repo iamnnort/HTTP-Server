@@ -13,7 +13,7 @@ class FileManager : public Manager
 public:
 	FileManager() {};
 	~FileManager() {};
-	int MakeResponseBody(Client*);
+	void MakeResponseBody(Client*);
 	string GetResponseBody();
 };
 

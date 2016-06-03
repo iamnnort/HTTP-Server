@@ -65,6 +65,8 @@ int main() {
 
 #else
 
+	system(COM_MANAGER_PATH);
+
 	struct sockaddr_in server;
 	int Listen, Connect;
 
@@ -99,31 +101,28 @@ int main() {
 	cout << SERVER_NAME << " is running..." << endl;
 	cout << "Waiting clients..." << endl;
 
-	FileManager manager;
-	Client client;
-
 	while (true) {
 
 #ifdef _MSC_VER
 		if (Connect = accept(Listen, NULL, NULL)) {
 #else
 		Connect = accept(Listen, 0, 0);
-		if (Connect >= 0){
+		if (Connect >= 0) {
 #endif		
-
-			//cut data from socket
 #ifdef _MSC_VER
-			ZeroMemory(message, sizeof(message));		
+			ZeroMemory(message, sizeof(message));
 #else
 			memset(&message, 0, sizeof(message));
 #endif	
-			recv(Connect, message, sizeof(message), 0);
+			if (recv(Connect, message, sizeof(message), 0) != NULL) {
 
-			//cout << "MRS: " << message << endl;
-			//get client info
-			client.MakeClientInfo(message);
-			//find requested file in public folder
-			if (manager.MakeResponseBody(&client) != NOT_FOUND) {
+				FileManager manager;
+				Client client;
+				//cout << message << endl;
+				//get client info
+				client.MakeClientInfo(message);
+				//find requested file in public folder
+				manager.MakeResponseBody(&client);
 				//make response
 				manager.MakeResponse(GOOD, manager.GetResponseBody());
 				//get response
@@ -136,19 +135,15 @@ int main() {
 				send(Connect, response.c_str(),
 					response.length(), 0);
 #endif
-			}
-			else {
-				client.SetAccessStatus(NOT_FOUND);
-			}
-			client.PrintClientInfo();
-			//complite log file
-			string content = client.MakeLogContent();
-			manager.MakeLog("access", content);
-
+				client.PrintClientInfo();
+				//complite log file
+				string content = client.MakeLogContent();
+				manager.MakeLog("access", content);
 #ifdef __linux__
-			shutdown(Connect, SHUT_RDWR);
-			close(Connect);
+				shutdown(Connect, SHUT_RDWR);
+				close(Connect);
 #endif
+			}
 		}
 	
 		if (exit_status) {

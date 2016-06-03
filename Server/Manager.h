@@ -4,7 +4,6 @@
 
 class Manager: public ServerLibrary
 {
-	string filedir;
 	string server_response;
 
 public:

@@ -5,7 +5,7 @@ string FileManager::GetResponseBody() {
 	return this->server_response_body;
 }
 
-int FileManager::MakeResponseBody(Client *client) {
+void FileManager::MakeResponseBody(Client *client) {
 
 	this->server_response_body.clear();
 	string domain = client->GetSiteName();
@@ -74,7 +74,8 @@ int FileManager::MakeResponseBody(Client *client) {
 	ifstream ifs(filedir.c_str(), ifstream::in);
 	if (!ifs) {
 		client->SetAccessStatus(404);
-		return client->GetAccessStatus();
+		filedir = NOT_FOUND_FILE;
+		ifs.open(filedir.c_str(), ifstream::in);
 	}
 
 	string sub_str;
@@ -84,8 +85,6 @@ int FileManager::MakeResponseBody(Client *client) {
 	}
 
 	ifs.close();
-
-	return client->GetAccessStatus();
 }
 
 
