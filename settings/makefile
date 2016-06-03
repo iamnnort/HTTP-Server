@@ -6,13 +6,14 @@ CFLAGS1 = -c -fno-access-control  -fcheck-new -ffriend-injection -fno-elide-cons
 
 ELFLAGS = -lpthread -ldl
 
-cRWFS = Server.o Client.o ServerLibrary.o Support.o
+all: server
 
-all: SQLiteDatabase.o Logger.o FileManager.o Manager.o Server.o Client.o ServerLibrary.o Support.o sqlite3.o dbDomains.o dbPages.o dbRangs.o dbUsers.o TablesLib.o
-	g++ SQLiteDatabase.o Logger.o FileManager.o Manager.o Server.o Client.o ServerLibrary.o Support.o sqlite3.o dbDomains.o dbPages.o dbRangs.o dbUsers.o TablesLib.o -o SServer $(ELFLAGS)
+server: SQLiteDatabase.o Logger.o FileManager.o Manager.o Server.o Client.o ServerLibrary.o Support.o sqlite3.o dbDomains.o dbPages.o dbRangs.o dbUsers.o TablesLib.o
+	g++ SQLiteDatabase.o Logger.o FileManager.o Manager.o Server.o Client.o ServerLibrary.o Support.o sqlite3.o dbDomains.o dbPages.o dbRangs.o dbUsers.o TablesLib.o -o Server $(ELFLAGS)
 
-server: 
-	gcc SQLiteDatabase.o Logger.o FileManager.o Manager.o Server.o Client.o ServerLibrary.o Support.o sqlite3.o dbDomains.o dbPages.o dbRangs.o dbUsers.o TablesLib.o -o SServer $(ELFLAGS)
+manager: SQLiteDatabase.o sqlite3.o dbDomains.o dbPages.o dbRangs.o dbUsers.o TablesLib.o Interface.o ComManager.o
+	g++ SQLiteDatabase.o sqlite3.o dbDomains.o dbPages.o dbRangs.o dbUsers.o TablesLib.o Interface.o ComManager.o -o ComManager $(ELFLAGS)
+
 
 Server.o: ../Server/Server.cpp
 	$(CPP) $(CFLAGS) ../Server/Server.cpp ../Server/Server.h
@@ -55,6 +56,13 @@ Support.o: ../Server/Support.cpp
 
 TablesLib.o: ../Server/TablesLib.cpp
 	$(CPP) $(CFLAGS) ../Server/TablesLib.cpp ../Server/TablesLib.h
+
+Interface.o: ../Manager/Interface.cpp
+	$(CPP) $(CFLAGS) ../Manager/Interface.cpp ../Manager/Interface.h
+
+ComManager.o: ../Manager/ComManager.cpp
+	$(CPP) $(CFLAGS) ../Manager/ComManager.cpp ../Manager/ComManager.h
+
 
 clear:
 	rm -rf *.o 
