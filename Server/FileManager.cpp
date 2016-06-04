@@ -66,7 +66,8 @@ void FileManager::MakeResponseBody(Client *client) {
 		client->SetAccessStatus(401);
 		filedir = AUTH_FILE;
 	}
-	else {
+	else if(filename.find("html")!=-1){
+		
 		filedir = ROOT_DIR + filedir;
 		client->SetAccessStatus(200);
 	}

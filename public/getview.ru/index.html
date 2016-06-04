@@ -2,26 +2,122 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>HTTP-Server</title>
+	<title>HTTP-SERVER</title>
 	<style>
 		h2{
 			font-size: 18px;
+		}
+		html{
+			background-color: #E0F7FA;
+			color: #004D40;
+			font-size: 18px;
+			font-family: Calibri, Georgia, 'Times New Roman', Times, serif;
+		}
+		a, a:visited{
+			color: #004D40;
+		}
+		.container{
+			width:1000px;
+			margin: 20px auto;
+			background-color: #B2EBF2;
+		}
+		.header, .content, .left{
+			padding-bottom: 5px;
+			padding-left: 5px;
+			padding-right: 10px;
+		}
+		.header--title{
+			text-align: center;
+			font-size: 50px;
+			padding: 20px 0;
+		}
+		.content{
+			min-height: 500px;
+		}
+		.content--menu--title, .center--title{
+			padding: 5px;
+			font-size: 22px;
+			background-color: #26C6DA;
+			color: #E0F7FA;
+			margin-bottom: 10px;
+		}
+		.content--menu--li a{
+			text-decoration: none;
+			display: block;
+			padding: 5px 0 5px 15px;
+		}
+		.content--menu--li a:hover{
+			background-color: #00BCD4;
+			color: #E0F7FA;
+		}
+		.left{
+			width: 300px;
+			float:left;
+		}
+		.center{
+			margin: 0 0 0 315px;
+		}
+		.center--title{
+			text-align: center;
+			background-color: #26C6DA;
+			color: #E0F7FA;
+			margin-bottom: 10px;
+		}
+		.center--users{
+			width: 200px;
+			float:left;
+		}
+		.center--users--li{
+			display: block;
+			padding: 5px 0 5px 15px;
+		}
+		.center--users--li:hover{
+			cursor: pointer;
+			background-color: #00BCD4;
+			color: #E0F7FA;
+		}
+		.center--pages{
+			margin-left: 210px;
+		}
+		.footer{
+			height: 50px;
+		}
+		.footer .creator{
+			text-align: center;
 		}
 	</style>
 </head>
 <body>
 
-	<h1>HTTP-Server</h1>
-	<h2>Creator Nikita Pavets</h2>
-	<ol>
-		<li>Created server</li>
-		<li>Web-server accept and process requests from client</li>
-		<li>Web-server cut requested file name from client's request</li>
-		<li>File system search requested file in public folder</li>
-		<li>Response body is made by file system</li>
-		<li>Server response combined with response body are sended to client</li>
-	</ol>
-	<h2><a href="pages/about.html">About</a></h2>
-
+	<div class="container">
+		<div class="header">
+			<div class="header--title">HTTP-SERVER</div>
+		</div>
+		<div class="content">
+			<div class="left">
+				<div class="content--menu--title">Menu:</div>
+				<div class="content--menu--li"><a href="/getview.ru/">Main Page</a></div>
+				<div class="content--menu--li"><a href="/getview.ru/pages/about.html">About</a></div>
+				<div class="content--menu--li"><a href="/getview.ru/pages/contacts.html">Contats</a></div>
+				<div class="content--menu--li"><a href="/getview.ru/pages/private.html">Private page</a></div>
+			</div>
+			<div class="center">
+				<div class="center--title">Managment</div>
+				<div class="center--users">
+					<div class="content--menu--title">Users:</div>
+					<div class="center--users--li">admin/admin/2</div>
+					<div class="center--users--li">superUser/123456/3</div>
+				</div>
+				<div class="center--pages">
+					<div class="content--menu--title">Pages:</div>
+					<div class="center--users--li">getview.ru/pages/about.html - rang 2</div>
+					<div class="center--users--li">getview.ru/pages/privethtml - rang 1</div>
+				</div>
+			</div>
+		</div>
+		<div class="footer">
+			<div class="creator">Created by Nikita Pavets (c) 2016</div>
+		</div>
+	</div>
 </body>
 </html>

@@ -65,8 +65,6 @@ int main() {
 
 #else
 
-	system(COM_MANAGER_PATH);
-
 	struct sockaddr_in server;
 	int Listen, Connect;
 

@@ -39,7 +39,7 @@ void SQLiteDatabase::Error(const char* type, const char* err_msg) {
  */
 void SQLiteDatabase::Init() {
 
-	/*const char* colDomains ="id INTEGER PRIMARY KEY AUTOINCREMENT," \
+	const char* colDomains ="id INTEGER PRIMARY KEY AUTOINCREMENT," \
 							"domain TEXT NOT NULL";
 	this->CreateTable("domains", colDomains);
 
@@ -67,7 +67,7 @@ void SQLiteDatabase::Init() {
 							"page_id INTEGER NOT NULL," \
 							"FOREIGN KEY(user_id) REFERENCES users(id)," \
 							"FOREIGN KEY(page_id) REFERENCES private_page(id)";
-	this->CreateTable("access", colAccess);*/
+	this->CreateTable("access", colAccess);
 
 	
 	/*this->Insert("rangs", "rang", "'user'");
@@ -75,7 +75,6 @@ void SQLiteDatabase::Init() {
 	this->Insert("rangs", "rang", "'moderator'");
 	this->Insert("rangs", "rang", "'manager'");
 	this->Insert("rangs", "rang", "'tester'");*/
-	
 }
 
 /**
